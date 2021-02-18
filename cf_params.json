@@ -1,0 +1,37 @@
+[
+  {
+    "ParameterKey": "InstanceType",
+    "ParameterValue": "t2.micro",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "ImageId",
+    "ParameterValue": "ami-005c06c6de69aee84",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "AvailabilityZone",
+    "ParameterValue": "us-west-1b",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "SubnetId",
+    "ParameterValue": "subnet-4eeef529",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "UserData",
+    "ParameterValue": "",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "KeyName",
+    "ParameterValue": "bot20200917170717439500000001",
+    "UsePreviousValue": false
+  },
+  {
+    "ParameterKey": "SecurityGroupIds",
+    "ParameterValue": "sg-0bffa03e454a43c96",
+    "UsePreviousValue": false
+  }
+]

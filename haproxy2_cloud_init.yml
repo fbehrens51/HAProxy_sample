@@ -1,0 +1,88 @@
+#cloud-config
+write_files:
+  - content: |
+      global
+          log         /dev/log local0
+          chroot      /var/lib/haproxy2
+          pidfile     /var/run/haproxy2.pid
+          maxconn     4000
+          user        haproxy
+          group       haproxy
+          daemon
+          # turn on stats unix socket
+          stats       socket /var/lib/haproxy2/stats
+          # utilize system-wide crypto-policies
+          ssl-default-bind-ciphers PROFILE=SYSTEM
+          ssl-default-server-ciphers PROFILE=SYSTEM
+          #for backend checks
+          ssl-server-verify none
+
+
+      defaults
+          mode    tcp
+          log     global
+          option  tcplog
+          option  logasap
+          option  dontlognull
+          option  http-server-close
+          option  redispatch
+          retries 3
+          timeout http-request    10s
+          timeout queue           1m
+          timeout connect         10s
+          timeout client          1m
+          timeout server          1m
+          timeout http-keep-alive 10s
+          timeout check           10s
+          maxconn 3000
+
+      resolvers mydns
+      nameserver dns1 8.8.8.8:53
+      nameserver dns2 8.8.4.4:53
+
+      listen health_check_http_url
+      bind :8080
+      mode http
+      monitor-uri /health
+      acl backend_down nbsrv(backend) eq 0
+      monitor fail if backend_down
+
+      listen backend
+      bind        *:443
+      mode        tcp
+      balance     leastconn
+      #if you want stickiness:
+      #stick       match src
+      #stick-table type ip size 200k expire 30m
+      #health check, currently checking for a any 2xx or 3xx response
+      option tcp-check
+      tcp-check connect port 443 ssl
+      tcp-check send GET\ /\ HTTP/1.1\r\n
+      tcp-check send Host:\ attendees.cf-app.com\r\n
+      tcp-check send \r\n
+      tcp-check expect rstring HTTP\/1\.(0|1)\ (2..|3..)
+      server      s1 attendees-grummer-throng.cfapps.pcfeaglelegacy.cf-app.com:443 check fall 3 rise 2 resolvers mydns
+      server      s2 attendees-quiet-ostrich-pj.cfapps.pcfeagle.cf-app.com:443 check fall 3 rise 2 resolvers mydns
+
+
+    owner: root:root
+    path: /etc/haproxy2/haproxy2.cfg
+    permissions: '0644'
+  - content: |
+      $AddUnixListenSocket /var/lib/haproxy/dev2/log
+
+      # Send haproxy2 messages to a dedicated logfile
+      :programname, startswith, "haproxy2" {
+        /var/log/haproxy.log
+        stop
+      }
+    path: /etc/rsyslog.d/99-haproxy2.conf
+
+runcmd:
+  - |
+    sudo amazon-linux-extras enable haproxy2
+    sudo yum install haproxy2 -y
+    sudo mkdir -p /var/lib/haproxy2/dev
+    sudo systemctl restart rsyslog.service
+    sudo systemctl enable haproxy2.service
+    sudo systemctl restart haproxy2.service

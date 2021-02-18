@@ -1,0 +1,54 @@
+{
+  "Parameters" : {
+    "InstanceType" : {
+      "Type" : "String",
+      "Default" : "t2.micro",
+      "Description" : "Enter instance type. Default is t2.micro."
+    },
+    "ImageId" : {
+      "Type" : "AWS::EC2::Image::Id",
+      "Description" : "Enter imageId"
+    },
+    "AvailabilityZone" : {
+      "Type" : "AWS::EC2::AvailabilityZone::Name",
+      "Description" : "Enter availabilityZone"
+    },
+    "SubnetId" : {
+      "Type" : "AWS::EC2::Subnet::Id",
+      "Description" : "Enter subnetId"
+    },
+    "UserData" : {
+      "Type" : "String",
+      "Description" : "user data for the instance"
+    },
+    "KeyName" : {
+      "Type" : "AWS::EC2::KeyPair::KeyName",
+      "Description" : "Enter the KeyName"
+    },
+    "SecurityGroupIds" : {
+      "Type" : "List<AWS::EC2::SecurityGroup::Id>",
+      "Description" : "Enter a list of Security Group Ids"
+    }
+  },
+  "Resources": {
+    "EC2I2U5FC": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": { "Ref" : "InstanceType" },
+        "ImageId": { "Ref" : "ImageId" },
+        "AvailabilityZone": { "Ref" : "AvailabilityZone" },
+        "UserData": {
+          "Fn::Base64" : { "Ref" : "UserData" }
+        },
+        "KeyName":  { "Ref" : "KeyName" },
+        "NetworkInterfaces": [ {
+          "AssociatePublicIpAddress": "true",
+          "DeviceIndex": "0",
+          "SubnetId": { "Ref" : "SubnetId" },
+          "GroupSet" : { "Ref" : "SecurityGroupIds" }
+        } ]
+      }
+    }
+  }
+}
+
