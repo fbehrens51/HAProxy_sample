@@ -16,14 +16,14 @@
 * Timely DNS changes is not within our problem to solve
 * DNS can occur eventually when satisfied with new platform results
 
-##Proposed Solution
+## Proposed Solution
 
-###Proxy Layer
+### Proxy Layer
 
 - Allows an intermediate layer to control which backend traffic is sent to.  (Req 2)
 - TCP Mode - In this mode it will pass through the request to the platform and preserve the proper endpoint for SSL termination. (Req 3)
 
-###DNS
+### DNS
 
 - No DNS change (Req #1)
   - Proposed steps to Reuse existing ELB for HAProxy (rough..to discuss)
@@ -51,12 +51,12 @@
     - no control over when new stack gets traffic (at the mercy of the DNS update and propagation)
 
 ## Health Check
-####Additional Info
+#### Additional Info
 This can be a little tricky.  It really depends on what level of health check we want and how the underlying platform and ELB healthchecks are configured.
 1. Since the underlying platforms are already using their own ELB(s), and those have their own health check(s), what level of reliance should we have on those?
 2. When implementing our own, we want to be sure that we're not removing the entire platform if one instance of the underlying application fails
  
-####Implementing health checks
+#### Implementing health checks
    
 1. Plain TCP check - will validate backend is reachable, but not necessarily that the application is working
 2. ssl type check - will validate backend is reachable and supporting ssl connections, but not necessarily that the application is working  
