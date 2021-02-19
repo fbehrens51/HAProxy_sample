@@ -4,10 +4,13 @@ set -ex
 curr_dir=$PWD
 
 export AWS_DEFAULT_REGION="us-west-1"
-#1.5  issue is that it doesn't support resolvers, so it will fail when ELB changes underlying IPs until you restart it
+##1.5  issue is that it doesn't support resolvers, so it will fail when ELB changes underlying IPs until you restart it
+## So, I wouldn't recommend using it
 #USER_DATA=$(cat haproxy_cloud_init.yml)
-#USER_DATA=$(cat haproxy2_cloud_init.yml)
+##1.8 is available in epel
 USER_DATA=$(cat haproxy18_cloud_init.yml)
+##2.x is available in amazon extras or directly from the haproxy site
+#USER_DATA=$(cat haproxy2_cloud_init.yml)
 
 jq --arg v "$USER_DATA"  '(.[] | select(.ParameterKey=="UserData") | .ParameterValue) |= $v' cf_params.json >tmp.json
 
