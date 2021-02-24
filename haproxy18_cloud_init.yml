@@ -54,13 +54,13 @@ write_files:
           #if you want stickiness:
           #stick       match src
           #stick-table type ip size 200k expire 30m
-#          #health check, currently checking for a any 2xx or 3xx response
-#          option tcp-check
-#          tcp-check connect port 443 ssl
-#          tcp-check send GET\ /\ HTTP/1.1\r\n
-#          tcp-check send Host:\ myapp.mydomain.tld\r\n
-#          tcp-check send \r\n
-#          tcp-check expect rstring HTTP\/1\.(0|1)\ (2..|3..)
+          #health check, currently checking for a any 2xx or 3xx response
+          #option tcp-check
+          #tcp-check connect port 443 ssl
+          #tcp-check send GET\ /\ HTTP/1.1\r\n
+          #tcp-check send Host:\ myapp.mydomain.tld\r\n
+          #tcp-check send \r\n
+          #tcp-check expect rstring HTTP\/1\.(0|1)\ (2..|3..)
           server      s1 OldPlatformELB.mydomain.tld:443 check fall 3 rise 2 resolvers mydns
           server      s2 NewPlatformELB.mydomain.tld:443 check fall 3 rise 2 resolvers mydns
 
