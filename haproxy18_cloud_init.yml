@@ -77,7 +77,9 @@ write_files:
             stop
           }
       path: /etc/rsyslog.d/99-haproxy18.conf
-
+    - content: |
+          CONFIG=/etc/haproxy18/haproxy18.cfg
+      path: /etc/sysconfig/haproxy18
 
 runcmd:
     - |
