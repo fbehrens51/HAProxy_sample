@@ -13,7 +13,7 @@
 5. Not overly complex.  This is not intended to live long term (will go away once satisfied with new platform).
 
 **Notes**
-* Timely DNS changes is not within our problem to solve
+* Timely DNS changes is not within our scope to solve
 * DNS can occur eventually when satisfied with new platform results
 
 ## Proposed Solution
@@ -30,7 +30,7 @@
     - Create new ELB
       - configure identical to existing, attach same (or new set of) instances, & validate
     - Update any Security Groups/rules
-    - Spin HAProxy instances pointing at new ELB & validate
+    - Spin up HAProxy instances pointing at new ELB & validate
     - Attach HAProxy instances to existing ELB & validate 
     - Remove non-HAproxy instances from ELB
   - Pros
@@ -68,7 +68,7 @@ This can be a little tricky.  It really depends on what level of health check we
           1. Application exposes a health check of its own 
           2. Write custom tcp-check to validate application is running
       2. Concerns
-          1. Sounds Ideal, but if we hit the one instance that just went bad, we would remove the whole platform.
+          1. Sounds Ideal, but if we hit the one instance that just went bad, we could wind up removing the whole platform.
              1. We would need to build in some fault tolerance.
              2. Is this really the responsibility of the underlying platform?
 
